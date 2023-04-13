@@ -7,28 +7,28 @@ public class Person {
 
     private int age;
 
-    private int workplace;
+    private int workplaceId;
 
-    private int car;
+    private int carId;
 
     //construktor to update a existing person
-    public Person (int personId, String firstName, String lastName, int age, int workplace, int car){
+    public Person (int personId, String firstName, String lastName, int age, int workplaceId, int carId){
         this.personId = personId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.workplace = workplace;
-        this.car = car;
+        this.workplaceId = workplaceId;
+        this.carId = carId;
     }
 
     //construktor to create a new person
-    public Person (String firstName, String lastName, int age, int workplace, int car){
+    public Person (String firstName, String lastName, int age, int workplace, int carId){
         this.personId = 0;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.workplace = workplace;
-        this.car = car;
+        this.workplaceId = workplace;
+        this.carId = carId;
     }
 
     public int getId() {
@@ -65,20 +65,20 @@ public class Person {
         this.age = age;
     }
 
-    public int getWorkplace() {
-        return workplace;
+    public int getWorkplaceId() {
+        return workplaceId;
     }
 
-    public void setWorkplace(int workplace) {
-        this.workplace = workplace;
+    public void setWorkplaceId(int workplaceId) {
+        this.workplaceId = workplaceId;
     }
 
-    public int getCar() {
-        return car;
+    public int getCarId() {
+        return carId;
     }
 
-    public void setCar(int car) {
-        this.car = car;
+    public void setCarId(int carId) {
+        this.carId = carId;
     }
 
     @Override
@@ -86,8 +86,8 @@ public class Person {
         return "Id: " + personId + "\n"+
                 "Firstname: " + firstName + "\n"+
                 "Lastname: " + lastName +  "\n"+
-                "Workplace: " + workplace  +"\n"+
-                "Car: " + car;
+                "Workplace: " + workplaceId +"\n"+
+                "Car: " + carId;
     }
 }
 

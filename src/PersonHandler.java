@@ -20,10 +20,10 @@ public class PersonHandler {
                 "\n firstname VARCHAR (50)," +
                 "\n lastname VARCHAR (50)," +
                 "\n age INTEGER," +
-                "\n workplace INTEGER," +
-                "\n car INTEGER," +
-                "FOREIGN KEY(workplace) REFERENCES workplace(workplaceId)," +
-                "FOREIGN KEY (car) REFERENCES car(carId))";
+                "\n workplaceId INTEGER," +
+                "\n carId INTEGER," +
+                "FOREIGN KEY(workplaceId) REFERENCES workplace(workplaceId)," +
+                "FOREIGN KEY (carId) REFERENCES car(carId))";
 
         try{
             Statement stmt = conn.createStatement();
@@ -76,8 +76,8 @@ public class PersonHandler {
             prpstmt.setString(1,person.getFirstName());
             prpstmt.setString(2, person.getLastName());
             prpstmt.setInt(3, person.getAge());
-            prpstmt.setInt(4, person.getWorkplace());
-            prpstmt.setInt(5, person.getCar());
+            prpstmt.setInt(4, person.getWorkplaceId());
+            prpstmt.setInt(5, person.getCarId());
             prpstmt.executeUpdate();
             System.out.println("Personen är skapad");
 
@@ -127,8 +127,8 @@ public class PersonHandler {
             prstmt.setString(1, person.getFirstName());
             prstmt.setString(2, person.getLastName());
             prstmt.setInt(3, person.getAge());
-            prstmt.setInt(4, person.getWorkplace());
-            prstmt.setInt(5, person.getCar());
+            prstmt.setInt(4, person.getWorkplaceId());
+            prstmt.setInt(5, person.getCarId());
             prstmt.executeUpdate();
             System.out.println("Personen är uppdaterad");
 
