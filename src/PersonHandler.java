@@ -14,8 +14,8 @@ public class PersonHandler {
         }
     }
 
-    public void createTableWorkers() {
-        String sql = "CREATE TABLE IF NOT EXISTS workers " +
+    public void createTables() {
+        String workers = "CREATE TABLE IF NOT EXISTS workers " +
                 "(personId INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "\n firstname VARCHAR (50)," +
                 "\n lastname VARCHAR (50)," +
@@ -25,49 +25,29 @@ public class PersonHandler {
                 "FOREIGN KEY(workplaceId) REFERENCES workplace(workplaceId)," +
                 "FOREIGN KEY (carId) REFERENCES car(carId))";
 
-        try {
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);
-            System.out.println("tabellen person är skapad");
-        } catch (SQLException e) {
-            System.out.println("Det gick fel vid skapandet av Persontabellen");
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void createTableWorkplace() {
-        String sql = "CREATE TABLE IF NOT EXISTS workplace " +
+        String workplace = "CREATE TABLE IF NOT EXISTS workplace " +
                 "(workplaceId INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "\n name VARCHAR (50)," +
                 "\n phoneNr INTEGER )";
 
-        try {
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);
-            System.out.println("tabellen workplace är skapad");
-        } catch (SQLException e) {
-            System.out.println("Det gick fel vid skapandet av workplacetabellen");
-            System.out.println(e.getMessage());
-        }
-
-    }
-
-    public void createTableCar() {
-        String sql = "CREATE TABLE IF NOT EXISTS car " +
+        String car = "CREATE TABLE IF NOT EXISTS car " +
                 "(carId INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "\n makeName VARCHAR (50)," +
                 "\n modelName INTEGER)";
 
         try {
             Statement stmt = conn.createStatement();
-            stmt.execute(sql);
-            System.out.println("tabellen car är skapad");
+            stmt.execute(workers);
+            stmt.execute(workplace);
+            stmt.execute(car);
+            System.out.println("the tables are created");
+
         } catch (SQLException e) {
-            System.out.println("Det gick fel vid skapandet av car-tabellen");
+            System.out.println("Det gick fel vid skapandet av tabellerna");
             System.out.println(e.getMessage());
         }
-
     }
+
 
     public void createPerson(Person person) {
 
@@ -119,8 +99,8 @@ public class PersonHandler {
     }
 
 
-    public void UpdateWorker(Person person) {
-        String sql = "UPDATE workers SET firstName = ?, lastName = ?, age = ?, workplaceId = ?, carid = ?";
+    public void updateWorker(Person person) {
+        String sql = "UPDATE workers SET firstName = ?, lastName = ?, age = ?, workplaceId = ?, carid = ? WHERE personId = ?";
 
         try {
             PreparedStatement prstmt = conn.prepareStatement(sql);
@@ -129,6 +109,7 @@ public class PersonHandler {
             prstmt.setInt(3, person.getAge());
             prstmt.setInt(4, person.getWorkplaceId());
             prstmt.setInt(5, person.getCarId());
+            prstmt.setInt(6, person.getId());
             prstmt.executeUpdate();
             System.out.println("Personen är uppdaterad");
 
@@ -139,12 +120,13 @@ public class PersonHandler {
     }
 
     public void updateWorkplace(Workplace workplace) {
-        String sql = "UPDATE workplace SET name = ?, phoneNr = ?";
+        String sql = "UPDATE workplace SET name = ?, phoneNr = ? WHERE workplaceId = ? ";
 
         try {
             PreparedStatement prstmt = conn.prepareStatement(sql);
             prstmt.setString(1, workplace.getName());
             prstmt.setInt(2, workplace.getPhoneNr());
+            prstmt.setInt(3, workplace.getId());
             prstmt.executeUpdate();
             System.out.println("Arbetsplatsen har uppdaterats");
 
@@ -155,12 +137,13 @@ public class PersonHandler {
     }
 
     public void updatecar(Car car) {
-        String sql = "UPDATE car SET makeName = ?, modelName = ?";
+        String sql = "UPDATE car SET makeName = ?, modelName = ? WHERE carId = ?";
 
         try {
             PreparedStatement prstmt = conn.prepareStatement(sql);
             prstmt.setString(1, car.getMakeName());
             prstmt.setString(2, car.getModelName());
+            prstmt.setInt(3, car.getId());
             prstmt.executeUpdate();
             System.out.println("Bilen har uppdaterats");
         } catch (SQLException e) {
@@ -191,16 +174,35 @@ public class PersonHandler {
         }
     }
 
-    public Person fetchWorker(int personid){
+    public void listcars() {
+        String sql = "SELECT carid, makeName, modelName FROM car";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            System.out.println("--carId -- makeName--modelName--");
+            while (rs.next()) {
+                System.out.println(rs.getInt("carId") + " " +
+                        rs.getString("makeName") + " " +
+                        rs.getString("modelName"));
+            }
+        } catch (SQLException e) {
+            System.out.println("something went wrong when fetching data");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Person fetchWorker(int personid) {
         Person person = null;
         String sql = "SELECT personId, firstname, lastname, age, workplaceId, carid FROM workers WHERE personId = ?";
 
-        try{
+        try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, personid);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()){
+            if (rs.next()) {
                 person = new Person(
                         rs.getInt("personId"),
                         rs.getString("Firstname"),
@@ -210,16 +212,120 @@ public class PersonHandler {
                         rs.getInt("CarId"));
             }
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Fel vid inläsning av arbetare");
             System.out.println(e.getMessage());
         }
 
 
-
         return person;
     }
 
+    public Car fetchCar(int carId) {
+        Car car = null;
+        String sql = "SELECT carid, makeName, modelName FROM car WHERE carId = ?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, carId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                car = new Car(
+                        rs.getInt("carId"),
+                        rs.getString("makeName"),
+                        rs.getString("modelName"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Fel vid inläsning av bil");
+            System.out.println(e.getMessage());
+        }
+
+        return car;
+    }
+
+    public void listWorkplaces() {
+        String sql = "SELECT workplaceId, name, phoneNr FROM workplace";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            System.out.println("--WorkplaceId -- Name--PhoneNr--");
+            while (rs.next()) {
+                System.out.println(rs.getInt("WorkplaceId") + " " +
+                        rs.getString("Name") + " " +
+                        rs.getInt("PhoneNr"));
+            }
+        } catch (SQLException e) {
+            System.out.println("something went wrong when fetching data");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Workplace fetchWorkplace(int workplaceId) {
+        Workplace workplace = null;
+        String sql = "SELECT workplaceId, name, phoneNr FROM workplace WHERE workplaceId = ?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, workplaceId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                workplace = new Workplace(
+                        rs.getInt("workplaceId"),
+                        rs.getString("name"),
+                        rs.getInt("phoneNr"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Fel vid inläsning av Arbetsplats");
+            System.out.println(e.getMessage());
+        }
+
+        return workplace;
+    }
+
+    public void deleteWorker(int personId) {
+        String sql = "DELETE FROM workers WHERE personId = ?";
+
+        try {
+            PreparedStatement prstmt = conn.prepareStatement(sql);
+            prstmt.setInt(1, personId);
+            prstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("det blev fel vid borttagning av person");
+        }
+    }
+
+    public void deleteCar(int carId) {
+        String sql = "DELETE FROM car WHERE carId = ?";
+
+        try {
+            PreparedStatement prstmt = conn.prepareStatement(sql);
+            prstmt.setInt(1, carId);
+            prstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("det blev fel vid borttagning av person");
+        }
+    }
+
+    public void deleteWorkplace(int workplaceId) {
+        String sql = "DELETE FROM workplace WHERE workplaceId = ?";
+
+        try {
+            PreparedStatement prstmt = conn.prepareStatement(sql);
+            prstmt.setInt(1, workplaceId);
+            prstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("det blev fel vid borttagning av person");
+        }
+    }
 }
 
 

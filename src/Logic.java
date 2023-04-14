@@ -8,70 +8,132 @@ public class Logic {
     PersonHandler personHandler = new PersonHandler("Workers");
 
     public void start() {
-        personHandler.createTableWorkers();
-        personHandler.createTableWorkplace();
-        personHandler.createTableCar();
+        personHandler.createTables();
+
         //populateDatabase();
 
-        meny.mainMenu();
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                addPerson();
-                break;
-            case 2:
-                addCar();
-                break;
-            case 3:
-                addWorkplace();
-                break;
-            case 4:
-                personHandler.listWorkers();
-                updateWorker();
-                break;
-            case 5:
-                //editCar();
-                break;
-            case 6:
-                //editWorkplace();
-                break;
-            case 7:
-                //deletePerson();
-                break;
-            case 8:
-                //deleteCar();
-                break;
-            case 9:
-                //deleteWorkplace();
-                break;
-            case 10:
-                personHandler.listWorkers();
-                break;
-            case 11:
-                //showAllCars();
-                break;
-            case 12:
-               //showAllWorkplaces();
-                break;
-            case 13:
-                //showAllPersonsByCar();
-                break;
-            case 14:
-                //showAllPersonsByWorkplace();
-                break;
-            case 15:
-                //showAllPersonsByCarAndWorkplace();
-                break;
-            case 16:
-                exit();
-                break;
-            case 17:
-                showWorker();
-                break;
-            default:
-                meny.invalidInput();
-                break;
+        while(true){
+            meny.mainMenu();
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    addPerson();
+                    break;
+                case 2:
+                    addCar();
+                    break;
+                case 3:
+                    addWorkplace();
+                    break;
+                case 4:
+                    personHandler.listWorkers();
+                    updateWorker();
+                    break;
+                case 5:
+                    personHandler.listcars();
+                    editCar();
+                    break;
+                case 6:
+                    personHandler.listWorkplaces();
+                    editWorkplace();
+                    break;
+                case 7:
+                    personHandler.listWorkers();
+                    deletePerson();
+                    break;
+                case 8:
+                    personHandler.listcars();
+                    deleteCar();
+                    break;
+                case 9:
+                    personHandler.listWorkplaces();
+                    deleteWorkplace();
+                    break;
+                case 10:
+                    personHandler.listWorkers();
+                    break;
+                case 11:
+                    personHandler.listcars();
+                    break;
+                case 12:
+                    personHandler.listWorkplaces();
+                    break;
+                case 13:
+                    //showAllPersonsByCar();
+                    break;
+                case 14:
+                    //showAllPersonsByWorkplace();
+                    break;
+                case 15:
+                    //showAllPersonsByCarAndWorkplace();
+                    break;
+                case 16:
+                    exit();
+                    break;
+                case 17:
+                    showWorker();
+                    break;
+                default:
+                    meny.invalidInput();
+                    break;
+            }
         }
+
+    }
+
+    private void deleteWorkplace() {
+        System.out.println("Enter id of workplace you want to delete: ");
+        int workplaceId = scanner.nextInt();
+        personHandler.deleteWorkplace(workplaceId);
+        System.out.println("Workplace " + workplaceId +" deleted");
+    }
+
+    private void deleteCar() {
+System.out.println("Enter id of car you want to delete: ");
+        int carId = scanner.nextInt();
+        personHandler.deleteCar(carId);
+        System.out.println("Car " + carId +" deleted");
+    }
+
+    private void deletePerson() {
+        System.out.println("Enter id of person you want to delete: ");
+        int personId = scanner.nextInt();
+        personHandler.deleteWorker(personId);
+        System.out.println("Person " + personId +" deleted");
+    }
+
+    private void editWorkplace() {
+        System.out.println("Enter id of workplace you want to update: ");
+        int workplaceId = scanner.nextInt();
+        Workplace w = personHandler.fetchWorkplace(workplaceId);
+        scanner.nextLine();
+
+        System.out.println("Enter new name: ");
+        w.setName(scanner.nextLine());
+        scanner.nextLine();
+
+        System.out.println("Enter new phone number: ");
+        w.setPhoneNr(scanner.nextInt());
+
+        personHandler.updateWorkplace(w);
+        System.out.println("Workplace " + workplaceId +" updated");
+    }
+
+    private void editCar() {
+        System.out.println("Enter id of car you want to update: ");
+        int carId = scanner.nextInt();
+        Car c = personHandler.fetchCar(carId);
+        scanner.nextLine();
+
+        System.out.println("Enter new brand: ");
+        c.setMakeName(scanner.nextLine());
+        scanner.nextLine();
+
+        System.out.println("Enter new model: ");
+        c.setModelName(scanner.nextLine());
+
+        personHandler.updatecar(c);
+        System.out.println("Car " + carId +" updated");
     }
 
     private void populateDatabase() {
@@ -119,16 +181,8 @@ public class Logic {
         p.setWorkplaceId(scanner.nextInt());
         System.out.println("Enter new car: ");
         String car = scanner.next();
-
-
-
-
-
-
-
-
-
-
+        personHandler.updateWorker(p);
+        System.out.println("Worker " + personId +" updated");
     }
 
 
@@ -139,7 +193,7 @@ public class Logic {
             System.out.println("Enter phone number: ");
             int phoneNr = scanner.nextInt();
             personHandler.createWorkplace(new Workplace(name, phoneNr));
-            System.out.println("Workplace added");
+            System.out.println("Workplace "+ name + " added");
         } catch (Exception e) {
             System.out.println("Invalid input, please try again");
         }
