@@ -11,6 +11,7 @@ public class Logic {
         personHandler.createTableWorkers();
         personHandler.createTableWorkplace();
         personHandler.createTableCar();
+        //populateDatabase();
 
         meny.mainMenu();
         int choice = scanner.nextInt();
@@ -25,7 +26,8 @@ public class Logic {
                 addWorkplace();
                 break;
             case 4:
-                //updatePerson();
+                personHandler.listWorkers();
+                updateWorker();
                 break;
             case 5:
                 //editCar();
@@ -43,7 +45,7 @@ public class Logic {
                 //deleteWorkplace();
                 break;
             case 10:
-                //showAllPersons();
+                personHandler.listWorkers();
                 break;
             case 11:
                 //showAllCars();
@@ -53,7 +55,6 @@ public class Logic {
                 break;
             case 13:
                 //showAllPersonsByCar();
-
                 break;
             case 14:
                 //showAllPersonsByWorkplace();
@@ -64,15 +65,72 @@ public class Logic {
             case 16:
                 exit();
                 break;
+            case 17:
+                showWorker();
+                break;
             default:
                 meny.invalidInput();
                 break;
         }
     }
 
-    private void updatePerson() {
+    private void populateDatabase() {
+        personHandler.createPerson(new Person("johan", "Skywalker", 19, 1, 1));
+        personHandler.createPerson(new Person("Leif", "Organa", 19, 4, 2));
+        personHandler.createPerson(new Person("Hansan", "Solo", 55, 1, 3));
+        personHandler.createPerson(new Person("Kalle", "Wookie", 19, 3, 2));
+        personHandler.createPerson(new Person("Morgana", "Svensson", 19, 2, 4));
+
+        personHandler.createWorkplace(new Workplace("McDonalds", 8002));
+        personHandler.createWorkplace(new Workplace("Burger King", 8003));
+        personHandler.createWorkplace(new Workplace("KFC", 8004));
+        personHandler.createWorkplace(new Workplace("Subway", 8005));
+
+        personHandler.createCar(new Car("Volvo", "V70"));
+        personHandler.createCar(new Car("Tesla", "Model S"));
+        personHandler.createCar(new Car("BMW", "M5"));
+        personHandler.createCar(new Car("Audi", "A6"));
+        personHandler.createCar(new Car("Mercedes", "C63"));
 
     }
+
+    private void showWorker() {
+
+        System.out.println("whats the personId of the worker that you want to see?");
+        int personId = scanner.nextInt();
+        Person p = personHandler.fetchWorker(personId);
+        System.out.println(p);
+
+    }
+
+    private void updateWorker() {
+
+        System.out.println("Enter id of person you want to update: ");
+        int personId = scanner.nextInt();
+        Person p = personHandler.fetchWorker(personId);
+
+        System.out.println("Enter new first name: ");
+        p.setFirstName(scanner.nextLine());
+        System.out.println("Enter new last name: ");
+        p.setLastName(scanner.nextLine());
+        System.out.println("Enter new age: ");
+        p.setAge(scanner.nextInt());
+        System.out.println("Enter new workplace: ");
+        p.setWorkplaceId(scanner.nextInt());
+        System.out.println("Enter new car: ");
+        String car = scanner.next();
+
+
+
+
+
+
+
+
+
+
+    }
+
 
     private void addWorkplace() {
         try {
