@@ -3,10 +3,9 @@ import java.sql.*;
 public class PersonHandler {
     Connection conn = null;
 
-    String dbname = "workers";
+    //String dbname = "workers";
 
     public PersonHandler(String dbname) {
-        this.dbname = dbname;
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:" + dbname + ".db");
         } catch (SQLException e) {
@@ -153,20 +152,21 @@ public class PersonHandler {
     }
 
     public void listWorkers() {
-        String sql = "SELECT personId, firstname, lastname , age, workplaceid, carid FROM workers";
+        String sql = "SELECT workers.personId AS id, workers.firstname || ' ' || workers.lastname AS name, workers.age, car.makeName, workplace.name AS workplace from workers\n" +
+                "INNER JOIN car ON workers.carId = car.carId\n" +
+                "INNER JOIN workplace ON workers.workplaceId = workplace.workplaceId";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            System.out.println("--PersonId -- Firstname--Lastname--Workplace--Car--");
+            System.out.println("--Id -- Name--Car--Workplace--");
             while (rs.next()) {
-                System.out.println(rs.getInt("personId") + " " +
-                        rs.getString("Firstname") + " " +
-                        rs.getString("Lastname") + " " +
+                System.out.println(rs.getInt("Id") + " " +
+                        rs.getString("Name") + " " +
                         rs.getInt("Age") + " " +
-                        rs.getInt("WorkplaceId") + " " +
-                        rs.getInt("Carid"));
+                        rs.getString("Makename") + " " +
+                        rs.getString("Workplace"));
             }
         } catch (SQLException e) {
             System.out.println("something went wrong when fetching data");
@@ -195,7 +195,7 @@ public class PersonHandler {
 
     public Person fetchWorker(int personid) {
         Person person = null;
-        String sql = "SELECT personId, firstname, lastname, age, workplaceId, carid FROM workers WHERE personId = ?";
+        String sql = "SELECT personId, firstname, lastname, age, workplaceId, carid FROM workers\n WHERE personId = ?";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -210,10 +210,12 @@ public class PersonHandler {
                         rs.getInt("Age"),
                         rs.getInt("WorkplaceId"),
                         rs.getInt("CarId"));
+            } else {
+                System.out.println("There is no person with that id");
             }
 
         } catch (SQLException e) {
-            System.out.println("Fel vid inläsning av arbetare");
+            System.out.println("Something went wrong when fetching data");
             System.out.println(e.getMessage());
         }
 
@@ -235,10 +237,12 @@ public class PersonHandler {
                         rs.getInt("carId"),
                         rs.getString("makeName"),
                         rs.getString("modelName"));
+            } else {
+                System.out.println("There is no car with that id");
             }
 
         } catch (SQLException e) {
-            System.out.println("Fel vid inläsning av bil");
+            System.out.println("Something went wrong when fetching data");
             System.out.println(e.getMessage());
         }
 
@@ -278,10 +282,12 @@ public class PersonHandler {
                         rs.getInt("workplaceId"),
                         rs.getString("name"),
                         rs.getInt("phoneNr"));
+            } else {
+                System.out.println("There is no workplace with that id");
             }
 
         } catch (SQLException e) {
-            System.out.println("Fel vid inläsning av Arbetsplats");
+            System.out.println("Something went wrong when fetching data");
             System.out.println(e.getMessage());
         }
 
@@ -297,7 +303,7 @@ public class PersonHandler {
             prstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("det blev fel vid borttagning av person");
+            System.out.println("Something went wrong when deleting worker");
         }
     }
 
@@ -310,7 +316,7 @@ public class PersonHandler {
             prstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("det blev fel vid borttagning av person");
+            System.out.println("Something went wrong when deleting car");
         }
     }
 
@@ -323,7 +329,7 @@ public class PersonHandler {
             prstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("det blev fel vid borttagning av person");
+            System.out.println("Something went wrong when deleting workplace");
         }
     }
 }

@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 
 public class Logic {
@@ -8,11 +9,12 @@ public class Logic {
     PersonHandler personHandler = new PersonHandler("Workers");
 
     public void start() {
+        boolean running = true;
         personHandler.createTables();
 
         //populateDatabase();
 
-        while(true){
+        while(running){
             meny.mainMenu();
             int choice = scanner.nextInt();
             switch (choice) {
@@ -69,6 +71,7 @@ public class Logic {
                     break;
                 case 16:
                     exit();
+                    running = false;
                     break;
                 case 17:
                     showWorker();
@@ -82,58 +85,86 @@ public class Logic {
     }
 
     private void deleteWorkplace() {
-        System.out.println("Enter id of workplace you want to delete: ");
-        int workplaceId = scanner.nextInt();
-        personHandler.deleteWorkplace(workplaceId);
-        System.out.println("Workplace " + workplaceId +" deleted");
+        try{
+            System.out.println("Enter id of workplace you want to delete: ");
+            int workplaceId = scanner.nextInt();
+            personHandler.deleteWorkplace(workplaceId);
+            System.out.println("Workplace " + workplaceId +" deleted");
+        }catch (Exception e){
+            System.out.println("Invalid input");
+            System.out.println(e.getMessage());
+        }
+
     }
 
     private void deleteCar() {
-System.out.println("Enter id of car you want to delete: ");
-        int carId = scanner.nextInt();
-        personHandler.deleteCar(carId);
-        System.out.println("Car " + carId +" deleted");
+        try{
+            System.out.println("Enter id of car you want to delete: ");
+            int carId = scanner.nextInt();
+            personHandler.deleteCar(carId);
+            System.out.println("Car " + carId +" deleted");
+        }catch (Exception e){
+            System.out.println("Invalid input");
+            System.out.println(e.getMessage());
+        }
+
     }
 
     private void deletePerson() {
-        System.out.println("Enter id of person you want to delete: ");
-        int personId = scanner.nextInt();
-        personHandler.deleteWorker(personId);
-        System.out.println("Person " + personId +" deleted");
+        try{
+            System.out.println("Enter id of person you want to delete: ");
+            int personId = scanner.nextInt();
+            personHandler.deleteWorker(personId);
+            System.out.println("Person " + personId +" deleted");
+        }catch (Exception e){
+            System.out.println("Invalid input");
+            System.out.println(e.getMessage());
+        }
+
     }
 
     private void editWorkplace() {
-        System.out.println("Enter id of workplace you want to update: ");
-        int workplaceId = scanner.nextInt();
-        Workplace w = personHandler.fetchWorkplace(workplaceId);
-        scanner.nextLine();
+        try{
+            System.out.println("Enter id of workplace you want to update: ");
+            int workplaceId = scanner.nextInt();
+            Workplace w = personHandler.fetchWorkplace(workplaceId);
+            scanner.nextLine();
 
-        System.out.println("Enter new name: ");
-        w.setName(scanner.nextLine());
-        scanner.nextLine();
+            System.out.println("Enter new name: ");
+            w.setName(scanner.nextLine());
+            scanner.nextLine();
 
-        System.out.println("Enter new phone number: ");
-        w.setPhoneNr(scanner.nextInt());
+            System.out.println("Enter new phone number: ");
+            w.setPhoneNr(scanner.nextInt());
 
-        personHandler.updateWorkplace(w);
-        System.out.println("Workplace " + workplaceId +" updated");
+            personHandler.updateWorkplace(w);
+            System.out.println("Workplace " + workplaceId +" updated");
+        }catch (Exception e){
+            System.out.println("Invalid input");
+            System.out.println(e.getMessage());
+        }
     }
 
     private void editCar() {
-        System.out.println("Enter id of car you want to update: ");
-        int carId = scanner.nextInt();
-        Car c = personHandler.fetchCar(carId);
-        scanner.nextLine();
+        try{
+            System.out.println("Enter id of car you want to update: ");
+            int carId = scanner.nextInt();
+            Car c = personHandler.fetchCar(carId);
+            scanner.nextLine();
 
-        System.out.println("Enter new brand: ");
-        c.setMakeName(scanner.nextLine());
-        scanner.nextLine();
+            System.out.println("Enter new brand: ");
+            c.setMakeName(scanner.nextLine());
+            scanner.nextLine();
 
-        System.out.println("Enter new model: ");
-        c.setModelName(scanner.nextLine());
+            System.out.println("Enter new model: ");
+            c.setModelName(scanner.nextLine());
 
-        personHandler.updatecar(c);
-        System.out.println("Car " + carId +" updated");
+            personHandler.updatecar(c);
+            System.out.println("Car " + carId +" updated");
+        } catch (Exception e){
+            System.out.println("Invalid input");
+            System.out.println(e.getMessage());
+        }
     }
 
     private void populateDatabase() {
@@ -157,32 +188,42 @@ System.out.println("Enter id of car you want to delete: ");
     }
 
     private void showWorker() {
-
-        System.out.println("whats the personId of the worker that you want to see?");
-        int personId = scanner.nextInt();
-        Person p = personHandler.fetchWorker(personId);
-        System.out.println(p);
+        try {
+            System.out.println("whats the personId of the worker that you want to see?");
+            int personId = scanner.nextInt();
+            Person p = personHandler.fetchWorker(personId);
+            System.out.println(p);
+            scanner.nextLine();
+        } catch (Exception e) {
+            System.out.println("Invalid input");
+            System.out.println(e.getMessage());
+        }
 
     }
 
     private void updateWorker() {
+        try{
+            System.out.println("Enter id of person you want to update: ");
+            int personId = scanner.nextInt();
+            Person p = personHandler.fetchWorker(personId);
 
-        System.out.println("Enter id of person you want to update: ");
-        int personId = scanner.nextInt();
-        Person p = personHandler.fetchWorker(personId);
+            System.out.println("Enter new first name: ");
+            p.setFirstName(scanner.nextLine());
+            System.out.println("Enter new last name: ");
+            p.setLastName(scanner.nextLine());
+            System.out.println("Enter new age: ");
+            p.setAge(scanner.nextInt());
+            System.out.println("Enter new workplace: ");
+            p.setWorkplaceId(scanner.nextInt());
+            System.out.println("Enter new car: ");
+            p.setCarId(scanner.nextInt());
+            personHandler.updateWorker(p);
+            System.out.println("Worker " + personId +" updated");
+        }catch (Exception e){
+            System.out.println("Invalid input");
+            System.out.println(e.getMessage());
+        }
 
-        System.out.println("Enter new first name: ");
-        p.setFirstName(scanner.nextLine());
-        System.out.println("Enter new last name: ");
-        p.setLastName(scanner.nextLine());
-        System.out.println("Enter new age: ");
-        p.setAge(scanner.nextInt());
-        System.out.println("Enter new workplace: ");
-        p.setWorkplaceId(scanner.nextInt());
-        System.out.println("Enter new car: ");
-        String car = scanner.next();
-        personHandler.updateWorker(p);
-        System.out.println("Worker " + personId +" updated");
     }
 
 
@@ -196,6 +237,7 @@ System.out.println("Enter id of car you want to delete: ");
             System.out.println("Workplace "+ name + " added");
         } catch (Exception e) {
             System.out.println("Invalid input, please try again");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -214,6 +256,7 @@ System.out.println("Enter id of car you want to delete: ");
             System.out.println("Car added");
         } catch (Exception e) {
             System.out.println("Invalid input, please try again");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -233,6 +276,7 @@ System.out.println("Enter id of car you want to delete: ");
             System.out.println("Person added");
         } catch (Exception e) {
             System.out.println("Invalid input, please try again");
+            System.out.println(e.getMessage());
         }
     }
 }
