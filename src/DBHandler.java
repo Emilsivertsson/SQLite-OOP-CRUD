@@ -1,11 +1,11 @@
 import java.sql.*;
 
-public class PersonHandler {
+public class DBHandler {
     Connection conn = null;
 
     //String dbname = "workers";
 
-    public PersonHandler(String dbname) {
+    public DBHandler(String dbname) {
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:" + dbname + ".db");
         } catch (SQLException e) {

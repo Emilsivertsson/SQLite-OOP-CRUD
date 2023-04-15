@@ -16,8 +16,8 @@ public class Meny {
         System.out.println("13. Show all persons with a specific car");
         System.out.println("14. Show all persons with a specific workplace");
         System.out.println("15. Show all persons with a specific car and workplace");
-        System.out.println("16. Exit");
-        System.out.println("17. show a worker");
+        System.out.println("16. Show a person");
+        System.out.println("17. Exit\"");
 
         System.out.println("Choose an option: ");
     }

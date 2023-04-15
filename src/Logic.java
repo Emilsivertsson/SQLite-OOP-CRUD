@@ -6,11 +6,11 @@ public class Logic {
     Scanner scanner = new Scanner(System.in);
     Meny meny = new Meny();
 
-    PersonHandler personHandler = new PersonHandler("Workers");
+    DBHandler DBHandler = new DBHandler("Workers");
 
     public void start() {
         boolean running = true;
-        personHandler.createTables();
+        DBHandler.createTables();
 
         //populateDatabase();
 
@@ -22,46 +22,46 @@ public class Logic {
                 case 2 -> addCar();
                 case 3 -> addWorkplace();
                 case 4 -> {
-                    personHandler.listWorkers();
+                    DBHandler.listWorkers();
                     updateWorker();
                 }
                 case 5 -> {
-                    personHandler.listcars();
+                    DBHandler.listcars();
                     editCar();
                 }
                 case 6 -> {
-                    personHandler.listWorkplaces();
+                    DBHandler.listWorkplaces();
                     editWorkplace();
                 }
                 case 7 -> {
-                    personHandler.listWorkers();
+                    DBHandler.listWorkers();
                     deletePerson();
                 }
                 case 8 -> {
-                    personHandler.listcars();
+                    DBHandler.listcars();
                     deleteCar();
                 }
                 case 9 -> {
-                    personHandler.listWorkplaces();
+                    DBHandler.listWorkplaces();
                     deleteWorkplace();
                 }
-                case 10 -> personHandler.listWorkers();
-                case 11 -> personHandler.listcars();
-                case 12 -> personHandler.listWorkplaces();
+                case 10 -> DBHandler.listWorkers();
+                case 11 -> DBHandler.listcars();
+                case 12 -> DBHandler.listWorkplaces();
                 case 13 -> {
-                    personHandler.listcars();
+                    DBHandler.listcars();
                     showAllPersonsByCar();
                 }
                 case 14 -> {
-                    personHandler.listWorkplaces();
+                    DBHandler.listWorkplaces();
                     showAllPersonsByWorkplace();
                 }
                 case 15 -> showAllPersonsByCarAndWorkplace();
-                case 16 -> {
+                case 16 -> showWorker();
+                case 17 -> {
                     exit();
                     running = false;
                 }
-                case 17 -> showWorker();
                 default -> meny.invalidInput();
             }
         }
@@ -70,13 +70,13 @@ public class Logic {
 
     private void showAllPersonsByCarAndWorkplace() {
         try{
-            personHandler.listcars();
+            DBHandler.listcars();
             System.out.println("Enter id of car: ");
             int carId = scanner.nextInt();
-            personHandler.listWorkplaces();
+            DBHandler.listWorkplaces();
             System.out.println("Enter id of workplace: ");
             int workplaceId = scanner.nextInt();
-            personHandler.listWorkersByCarAndWorkplace(carId, workplaceId);
+            DBHandler.listWorkersByCarAndWorkplace(carId, workplaceId);
         }catch (Exception e){
             System.out.println("Invalid input");
             System.out.println(e.getMessage());
@@ -87,7 +87,7 @@ public class Logic {
         try{
             System.out.println("Enter id of workplace: ");
             int workplaceId = scanner.nextInt();
-            personHandler.listWorkersByWorkplace(workplaceId);
+            DBHandler.listWorkersByWorkplace(workplaceId);
         }catch (Exception e){
             System.out.println("Invalid input");
             System.out.println(e.getMessage());
@@ -98,7 +98,7 @@ public class Logic {
         try{
             System.out.println("Enter id of car: ");
             int carId = scanner.nextInt();
-            personHandler.listWorkersByCar(carId);
+            DBHandler.listWorkersByCar(carId);
     }catch (Exception e){
             System.out.println("Invalid input");
             System.out.println(e.getMessage());
@@ -109,7 +109,7 @@ public class Logic {
         try{
             System.out.println("Enter id of workplace you want to delete: ");
             int workplaceId = scanner.nextInt();
-            personHandler.deleteWorkplace(workplaceId);
+            DBHandler.deleteWorkplace(workplaceId);
             System.out.println("Workplace " + workplaceId +" deleted");
         }catch (Exception e){
             System.out.println("Invalid input");
@@ -122,7 +122,7 @@ public class Logic {
         try{
             System.out.println("Enter id of car you want to delete: ");
             int carId = scanner.nextInt();
-            personHandler.deleteCar(carId);
+            DBHandler.deleteCar(carId);
             System.out.println("Car " + carId +" deleted");
         }catch (Exception e){
             System.out.println("Invalid input");
@@ -135,7 +135,7 @@ public class Logic {
         try{
             System.out.println("Enter id of person you want to delete: ");
             int personId = scanner.nextInt();
-            personHandler.deleteWorker(personId);
+            DBHandler.deleteWorker(personId);
             System.out.println("Person " + personId +" deleted");
         }catch (Exception e){
             System.out.println("Invalid input");
@@ -148,7 +148,7 @@ public class Logic {
         try{
             System.out.println("Enter id of workplace you want to update: ");
             int workplaceId = scanner.nextInt();
-            Workplace w = personHandler.fetchWorkplace(workplaceId);
+            Workplace w = DBHandler.fetchWorkplace(workplaceId);
             scanner.nextLine();
 
             System.out.println("Enter new workplace-name: ");
@@ -158,7 +158,7 @@ public class Logic {
             System.out.println("Enter new phone number: ");
             w.setPhoneNr(scanner.nextInt());
 
-            personHandler.updateWorkplace(w);
+            DBHandler.updateWorkplace(w);
             System.out.println("Workplace " + workplaceId +" updated");
         }catch (Exception e){
             System.out.println("Invalid input");
@@ -170,7 +170,7 @@ public class Logic {
         try{
             System.out.println("Enter id of car you want to update: ");
             int carId = scanner.nextInt();
-            Car c = personHandler.fetchCar(carId);
+            Car c = DBHandler.fetchCar(carId);
             scanner.nextLine();
 
             System.out.println("Enter new brand: ");
@@ -180,7 +180,7 @@ public class Logic {
             System.out.println("Enter new model: ");
             c.setModelName(scanner.next());
 
-            personHandler.updatecar(c);
+            DBHandler.updatecar(c);
             System.out.println("Car " + carId +" updated");
         } catch (Exception e){
             System.out.println("Invalid input");
@@ -194,7 +194,7 @@ public class Logic {
         try {
             System.out.println("whats the personId of the worker that you want to see?");
             int personId = scanner.nextInt();
-            Person p = personHandler.fetchWorker(personId);
+            Person p = DBHandler.fetchWorker(personId);
             System.out.println(p);
 
         } catch (Exception e) {
@@ -208,7 +208,7 @@ public class Logic {
         try{
             System.out.println("Enter id of person you want to update: ");
             int personId = scanner.nextInt();
-            Person p = personHandler.fetchWorker(personId);
+            Person p = DBHandler.fetchWorker(personId);
 
             System.out.println("Enter new first name: ");
             p.setFirstName(scanner.next());
@@ -220,7 +220,7 @@ public class Logic {
             p.setWorkplaceId(scanner.nextInt());
             System.out.println("Enter new car: ");
             p.setCarId(scanner.nextInt());
-            personHandler.updateWorker(p);
+            DBHandler.updateWorker(p);
             System.out.println("Worker " + personId +" updated");
         }catch (Exception e){
             System.out.println("Invalid input");
@@ -236,7 +236,7 @@ public class Logic {
             String name = scanner.next();
             System.out.println("Enter phone number: ");
             int phoneNr = scanner.nextInt();
-            personHandler.createWorkplace(new Workplace(name, phoneNr));
+            DBHandler.createWorkplace(new Workplace(name, phoneNr));
             System.out.println("Workplace "+ name + " added");
         } catch (Exception e) {
             System.out.println("Invalid input, please try again");
@@ -255,7 +255,7 @@ public class Logic {
             String brand = scanner.next();
             System.out.println("Enter model: ");
             String model = scanner.next();
-            personHandler.createCar(new Car(brand, model));
+            DBHandler.createCar(new Car(brand, model));
             System.out.println("Car added");
         } catch (Exception e) {
             System.out.println("Invalid input, please try again");
@@ -275,7 +275,7 @@ public class Logic {
             int carId = scanner.nextInt();
             System.out.println("Enter workplace id: ");
             int workplaceId = scanner.nextInt();
-            personHandler.createPerson(new Person(firstName, lastName, age, workplaceId, carId));
+            DBHandler.createPerson(new Person(firstName, lastName, age, workplaceId, carId));
             System.out.println("Person added");
         } catch (Exception e) {
             System.out.println("Invalid input, please try again");
@@ -284,22 +284,22 @@ public class Logic {
     }
 
     private void populateDatabase() {
-        personHandler.createPerson(new Person("johan", "Skywalker", 19, 1, 1));
-        personHandler.createPerson(new Person("Leif", "Organa", 19, 4, 2));
-        personHandler.createPerson(new Person("Hansan", "Solo", 55, 1, 3));
-        personHandler.createPerson(new Person("Kalle", "Wookie", 19, 3, 2));
-        personHandler.createPerson(new Person("Morgana", "Svensson", 19, 2, 4));
+        DBHandler.createPerson(new Person("johan", "Skywalker", 19, 1, 1));
+        DBHandler.createPerson(new Person("Leif", "Organa", 19, 4, 2));
+        DBHandler.createPerson(new Person("Hansan", "Solo", 55, 1, 3));
+        DBHandler.createPerson(new Person("Kalle", "Wookie", 19, 3, 2));
+        DBHandler.createPerson(new Person("Morgana", "Svensson", 19, 2, 4));
 
-        personHandler.createWorkplace(new Workplace("McDonalds", 8002));
-        personHandler.createWorkplace(new Workplace("Burger King", 8003));
-        personHandler.createWorkplace(new Workplace("KFC", 8004));
-        personHandler.createWorkplace(new Workplace("Subway", 8005));
+        DBHandler.createWorkplace(new Workplace("McDonalds", 8002));
+        DBHandler.createWorkplace(new Workplace("Burger King", 8003));
+        DBHandler.createWorkplace(new Workplace("KFC", 8004));
+        DBHandler.createWorkplace(new Workplace("Subway", 8005));
 
-        personHandler.createCar(new Car("Volvo", "V70"));
-        personHandler.createCar(new Car("Tesla", "Model S"));
-        personHandler.createCar(new Car("BMW", "M5"));
-        personHandler.createCar(new Car("Audi", "A6"));
-        personHandler.createCar(new Car("Mercedes", "C63"));
+        DBHandler.createCar(new Car("Volvo", "V70"));
+        DBHandler.createCar(new Car("Tesla", "Model S"));
+        DBHandler.createCar(new Car("BMW", "M5"));
+        DBHandler.createCar(new Car("Audi", "A6"));
+        DBHandler.createCar(new Car("Mercedes", "C63"));
 
     }
 }
