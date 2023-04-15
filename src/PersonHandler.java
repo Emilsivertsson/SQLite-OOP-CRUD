@@ -160,7 +160,7 @@ public class PersonHandler {
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            System.out.println("--Id -- Name--Car--Workplace--");
+            System.out.println("--Id -- Name--Age--Car--Workplace--");
             while (rs.next()) {
                 System.out.println(rs.getInt("Id") + " " +
                         rs.getString("Name") + " " +
@@ -330,6 +330,82 @@ public class PersonHandler {
 
         } catch (SQLException e) {
             System.out.println("Something went wrong when deleting workplace");
+        }
+    }
+
+    public void listWorkersByCar(int carId) {
+        String sql = "SELECT workers.personId AS id, workers.firstname || ' ' || workers.lastname AS name, workers.age, car.makeName, workplace.name AS workplace from workers\n" +
+                "INNER JOIN car ON workers.carId = car.carId\n" +
+                "INNER JOIN workplace ON workers.workplaceId = workplace.workplaceId\n" +
+                "WHERE car.carId = ?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, carId);
+            ResultSet rs = stmt.executeQuery();
+
+            System.out.println("--Id -- Name--Age--Car--Workplace--");
+            while (rs.next()) {
+                System.out.println(rs.getInt("Id") + " " +
+                        rs.getString("Name") + " " +
+                        rs.getInt("Age") + " " +
+                        rs.getString("Makename") + " " +
+                        rs.getString("Workplace"));
+            }
+        } catch (SQLException e) {
+            System.out.println("something went wrong when fetching data");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void listWorkersByWorkplace(int workplaceId) {
+        String sql = "SELECT workers.personId AS id, workers.firstname || ' ' || workers.lastname AS name, workers.age, car.makeName, workplace.name AS workplace from workers\n" +
+                "INNER JOIN car ON workers.carId = car.carId\n" +
+                "INNER JOIN workplace ON workers.workplaceId = workplace.workplaceId\n" +
+                "WHERE workplace.workplaceId = ?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, workplaceId);
+            ResultSet rs = stmt.executeQuery();
+
+            System.out.println("--Id -- Name--Age--Car--Workplace--");
+            while (rs.next()) {
+                System.out.println(rs.getInt("Id") + " " +
+                        rs.getString("Name") + " " +
+                        rs.getInt("Age") + " " +
+                        rs.getString("Makename") + " " +
+                        rs.getString("Workplace"));
+            }
+        } catch (SQLException e) {
+            System.out.println("something went wrong when fetching data");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void listWorkersByCarAndWorkplace(int carId, int workplaceId) {
+        String sql = "SELECT workers.personId AS id, workers.firstname || ' ' || workers.lastname AS name, workers.age, car.makeName, workplace.name AS workplace from workers\n" +
+                "INNER JOIN car ON workers.carId = car.carId\n" +
+                "INNER JOIN workplace ON workers.workplaceId = workplace.workplaceId\n" +
+                "WHERE car.carId = ? AND workplace.workplaceId = ?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, carId);
+            stmt.setInt(2, workplaceId);
+            ResultSet rs = stmt.executeQuery();
+
+            System.out.println("--Id -- Name--Age--Car--Workplace--");
+            while (rs.next()) {
+                System.out.println(rs.getInt("Id") + " " +
+                        rs.getString("Name") + " " +
+                        rs.getInt("Age") + " " +
+                        rs.getString("Makename") + " " +
+                        rs.getString("Workplace"));
+            }
+        } catch (SQLException e) {
+            System.out.println("something went wrong when fetching data");
+            System.out.println(e.getMessage());
         }
     }
 }

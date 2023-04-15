@@ -18,70 +18,91 @@ public class Logic {
             meny.mainMenu();
             int choice = scanner.nextInt();
             switch (choice) {
-                case 1:
-                    addPerson();
-                    break;
-                case 2:
-                    addCar();
-                    break;
-                case 3:
-                    addWorkplace();
-                    break;
-                case 4:
+                case 1 -> addPerson();
+                case 2 -> addCar();
+                case 3 -> addWorkplace();
+                case 4 -> {
                     personHandler.listWorkers();
                     updateWorker();
-                    break;
-                case 5:
+                }
+                case 5 -> {
                     personHandler.listcars();
                     editCar();
-                    break;
-                case 6:
+                }
+                case 6 -> {
                     personHandler.listWorkplaces();
                     editWorkplace();
-                    break;
-                case 7:
+                }
+                case 7 -> {
                     personHandler.listWorkers();
                     deletePerson();
-                    break;
-                case 8:
+                }
+                case 8 -> {
                     personHandler.listcars();
                     deleteCar();
-                    break;
-                case 9:
+                }
+                case 9 -> {
                     personHandler.listWorkplaces();
                     deleteWorkplace();
-                    break;
-                case 10:
-                    personHandler.listWorkers();
-                    break;
-                case 11:
+                }
+                case 10 -> personHandler.listWorkers();
+                case 11 -> personHandler.listcars();
+                case 12 -> personHandler.listWorkplaces();
+                case 13 -> {
                     personHandler.listcars();
-                    break;
-                case 12:
+                    showAllPersonsByCar();
+                }
+                case 14 -> {
                     personHandler.listWorkplaces();
-                    break;
-                case 13:
-                    //showAllPersonsByCar();
-                    break;
-                case 14:
-                    //showAllPersonsByWorkplace();
-                    break;
-                case 15:
-                    //showAllPersonsByCarAndWorkplace();
-                    break;
-                case 16:
+                    showAllPersonsByWorkplace();
+                }
+                case 15 -> showAllPersonsByCarAndWorkplace();
+                case 16 -> {
                     exit();
                     running = false;
-                    break;
-                case 17:
-                    showWorker();
-                    break;
-                default:
-                    meny.invalidInput();
-                    break;
+                }
+                case 17 -> showWorker();
+                default -> meny.invalidInput();
             }
         }
 
+    }
+
+    private void showAllPersonsByCarAndWorkplace() {
+        try{
+            personHandler.listcars();
+            System.out.println("Enter id of car: ");
+            int carId = scanner.nextInt();
+            personHandler.listWorkplaces();
+            System.out.println("Enter id of workplace: ");
+            int workplaceId = scanner.nextInt();
+            personHandler.listWorkersByCarAndWorkplace(carId, workplaceId);
+        }catch (Exception e){
+            System.out.println("Invalid input");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void showAllPersonsByWorkplace() {
+        try{
+            System.out.println("Enter id of workplace: ");
+            int workplaceId = scanner.nextInt();
+            personHandler.listWorkersByWorkplace(workplaceId);
+        }catch (Exception e){
+            System.out.println("Invalid input");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void showAllPersonsByCar() {
+        try{
+            System.out.println("Enter id of car: ");
+            int carId = scanner.nextInt();
+            personHandler.listWorkersByCar(carId);
+    }catch (Exception e){
+            System.out.println("Invalid input");
+            System.out.println(e.getMessage());
+        }
     }
 
     private void deleteWorkplace() {
@@ -130,8 +151,8 @@ public class Logic {
             Workplace w = personHandler.fetchWorkplace(workplaceId);
             scanner.nextLine();
 
-            System.out.println("Enter new name: ");
-            w.setName(scanner.nextLine());
+            System.out.println("Enter new workplace-name: ");
+            w.setName(scanner.next());
             scanner.nextLine();
 
             System.out.println("Enter new phone number: ");
@@ -153,11 +174,11 @@ public class Logic {
             scanner.nextLine();
 
             System.out.println("Enter new brand: ");
-            c.setMakeName(scanner.nextLine());
+            c.setMakeName(scanner.next());
             scanner.nextLine();
 
             System.out.println("Enter new model: ");
-            c.setModelName(scanner.nextLine());
+            c.setModelName(scanner.next());
 
             personHandler.updatecar(c);
             System.out.println("Car " + carId +" updated");
@@ -167,25 +188,7 @@ public class Logic {
         }
     }
 
-    private void populateDatabase() {
-        personHandler.createPerson(new Person("johan", "Skywalker", 19, 1, 1));
-        personHandler.createPerson(new Person("Leif", "Organa", 19, 4, 2));
-        personHandler.createPerson(new Person("Hansan", "Solo", 55, 1, 3));
-        personHandler.createPerson(new Person("Kalle", "Wookie", 19, 3, 2));
-        personHandler.createPerson(new Person("Morgana", "Svensson", 19, 2, 4));
 
-        personHandler.createWorkplace(new Workplace("McDonalds", 8002));
-        personHandler.createWorkplace(new Workplace("Burger King", 8003));
-        personHandler.createWorkplace(new Workplace("KFC", 8004));
-        personHandler.createWorkplace(new Workplace("Subway", 8005));
-
-        personHandler.createCar(new Car("Volvo", "V70"));
-        personHandler.createCar(new Car("Tesla", "Model S"));
-        personHandler.createCar(new Car("BMW", "M5"));
-        personHandler.createCar(new Car("Audi", "A6"));
-        personHandler.createCar(new Car("Mercedes", "C63"));
-
-    }
 
     private void showWorker() {
         try {
@@ -193,7 +196,7 @@ public class Logic {
             int personId = scanner.nextInt();
             Person p = personHandler.fetchWorker(personId);
             System.out.println(p);
-            scanner.nextLine();
+
         } catch (Exception e) {
             System.out.println("Invalid input");
             System.out.println(e.getMessage());
@@ -208,9 +211,9 @@ public class Logic {
             Person p = personHandler.fetchWorker(personId);
 
             System.out.println("Enter new first name: ");
-            p.setFirstName(scanner.nextLine());
+            p.setFirstName(scanner.next());
             System.out.println("Enter new last name: ");
-            p.setLastName(scanner.nextLine());
+            p.setLastName(scanner.next());
             System.out.println("Enter new age: ");
             p.setAge(scanner.nextInt());
             System.out.println("Enter new workplace: ");
@@ -278,5 +281,25 @@ public class Logic {
             System.out.println("Invalid input, please try again");
             System.out.println(e.getMessage());
         }
+    }
+
+    private void populateDatabase() {
+        personHandler.createPerson(new Person("johan", "Skywalker", 19, 1, 1));
+        personHandler.createPerson(new Person("Leif", "Organa", 19, 4, 2));
+        personHandler.createPerson(new Person("Hansan", "Solo", 55, 1, 3));
+        personHandler.createPerson(new Person("Kalle", "Wookie", 19, 3, 2));
+        personHandler.createPerson(new Person("Morgana", "Svensson", 19, 2, 4));
+
+        personHandler.createWorkplace(new Workplace("McDonalds", 8002));
+        personHandler.createWorkplace(new Workplace("Burger King", 8003));
+        personHandler.createWorkplace(new Workplace("KFC", 8004));
+        personHandler.createWorkplace(new Workplace("Subway", 8005));
+
+        personHandler.createCar(new Car("Volvo", "V70"));
+        personHandler.createCar(new Car("Tesla", "Model S"));
+        personHandler.createCar(new Car("BMW", "M5"));
+        personHandler.createCar(new Car("Audi", "A6"));
+        personHandler.createCar(new Car("Mercedes", "C63"));
+
     }
 }
